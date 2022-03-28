@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="box" :class="{start: isRolling, stop: isStoping}">
+    <div ref="boxRef" class="box">
       <div v-for="n in 4" :key="n">{{n}}</div>
       <div class="">1</div>
     </div>
@@ -13,45 +13,96 @@
   </button>
 </template>
 <script lang="ts">
-import { defineComponent,ref } from "@vue/runtime-core";
+import { defineComponent,onMounted,ref,watchEffect } from "@vue/runtime-core";
 
 export default defineComponent({
   setup(props) {
     const isRolling = ref(false)
-    const isStoping = ref(false)
+    const boxRef = ref<HTMLDivElement>()
+
     const handleStart = () => {
+      if(!boxRef.value) return
+      boxRef.value.classList.remove("stop")
+      boxRef.value.classList.remove("stop-2")
+      boxRef.value.classList.add('start')
       isRolling.value = true
-      isStoping.value = false
     }
     const handleStop = () => {
+      boxRef.value?.classList.remove("start")
+      boxRef.value?.classList.add('stopping')
+      // boxRef.value?.classList.add('stop-2')
+
       isRolling.value = false
-      isStoping.value = true
+
+      setTimeout(() => {
+        boxRef.value?.classList.replace("stopping", "stop")
+        boxRef.value?.classList.add("stop-2")
+      }, 1000* 1)
     }
     return {
       isRolling,
-      isStoping,
       handleStart,
       handleStop,
+      boxRef,
     }
   }
 })
 </script>
 <style lang="scss">
+:root {
+  font-size: 30px;
+}
 @keyframes rolling {
   0% {
-    transform: translateY(calc(-100% + 80px));
+    transform: translateY(calc(-100% + 5rem));
   }
   100% {
     transform: translateY(0%);
   }
 }
-@keyframes stoping {
+@keyframes stopping {
   0% {
-    transform: translateY(calc(-100% + 80px));
+    transform: translateY(calc(-100% + 5rem));
   }
 
   100% {
-    transform: translateY(calc(0% - 80px));
+    transform: translateY(0%);
+  }
+}
+@keyframes stop-1 {
+  0% {
+    transform: translateY(calc(-100% + 5rem));
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+@keyframes stop-2 {
+  0% {
+    transform: translateY(calc(-100% + 5rem));
+  }
+
+  100% {
+    transform: translateY(calc(-5rem));
+  }
+}
+@keyframes stop-3 {
+  0% {
+    transform: translateY(calc(-100% + 5rem));
+  }
+
+  100% {
+    transform: translateY(calc(-5rem * 2));
+  }
+}
+@keyframes stop-4 {
+  0% {
+    transform: translateY(calc(-100% + 5rem));
+  }
+
+  100% {
+    transform: translateY(calc(-5rem * 3));
   }
 }
 body {
@@ -75,14 +126,32 @@ body {
       animation-duration: 0.5s;
       animation-iteration-count: infinite;
       animation-timing-function: linear;
-      animation-fill-mode: forwards;
+      /* animation-fill-mode: forwards; */
+    }
+    &.stopping {
+      animation-name: stopping;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      /* animation-fill-mode: forwards; */
     }
     &.stop {
-      animation-name: stoping;
-      animation-duration: 5s;
+      animation-duration: 2.5s;
       animation-iteration-count: 1;
       animation-timing-function: ease-out;
       animation-fill-mode: forwards;
+    }
+    &.stop-1 {
+      animation-name: stop-1;
+    }
+    &.stop-2 {
+      animation-name: stop-2;
+    }
+    &.stop-3 {
+      animation-name: stop-3;
+    }
+    &.stop-4 {
+      animation-name: stop-4;
     }
     > div {
       width: 5rem;
