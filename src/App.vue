@@ -23,21 +23,19 @@ export default defineComponent({
     const handleStart = () => {
       if(!boxRef.value) return
       boxRef.value.classList.remove("stop")
-      boxRef.value.classList.remove("stop-2")
       boxRef.value.classList.add('start')
       isRolling.value = true
     }
     const handleStop = () => {
       boxRef.value?.classList.remove("start")
       boxRef.value?.classList.add('stopping')
-      // boxRef.value?.classList.add('stop-2')
+      boxRef.value?.style.setProperty("--target-num", "1")
 
       isRolling.value = false
 
       setTimeout(() => {
         boxRef.value?.classList.replace("stopping", "stop")
-        boxRef.value?.classList.add("stop-2")
-      }, 1000* 1)
+      }, 1000 * 1)
     }
     return {
       isRolling,
@@ -51,7 +49,9 @@ export default defineComponent({
 <style lang="scss">
 :root {
   font-size: 30px;
+  --target-num: 2;
 }
+
 @keyframes rolling {
   0% {
     transform: translateY(calc(-100% + 5rem));
@@ -69,42 +69,16 @@ export default defineComponent({
     transform: translateY(0%);
   }
 }
-@keyframes stop-1 {
+@keyframes stop {
   0% {
     transform: translateY(calc(-100% + 5rem));
   }
 
   100% {
-    transform: translateY(0%);
+    transform: translateY(calc(-5rem * (var(--target-num) - 1)));
   }
 }
-@keyframes stop-2 {
-  0% {
-    transform: translateY(calc(-100% + 5rem));
-  }
 
-  100% {
-    transform: translateY(calc(-5rem));
-  }
-}
-@keyframes stop-3 {
-  0% {
-    transform: translateY(calc(-100% + 5rem));
-  }
-
-  100% {
-    transform: translateY(calc(-5rem * 2));
-  }
-}
-@keyframes stop-4 {
-  0% {
-    transform: translateY(calc(-100% + 5rem));
-  }
-
-  100% {
-    transform: translateY(calc(-5rem * 3));
-  }
-}
 body {
   padding: 100px;
 }
@@ -136,23 +110,13 @@ body {
       /* animation-fill-mode: forwards; */
     }
     &.stop {
-      animation-duration: 2.5s;
+      animation-name: stop;
+      animation-duration: calc(1s * (1 + (4 - var(--target-num))));
       animation-iteration-count: 1;
-      animation-timing-function: ease-out;
+      animation-timing-function: linear;
       animation-fill-mode: forwards;
     }
-    &.stop-1 {
-      animation-name: stop-1;
-    }
-    &.stop-2 {
-      animation-name: stop-2;
-    }
-    &.stop-3 {
-      animation-name: stop-3;
-    }
-    &.stop-4 {
-      animation-name: stop-4;
-    }
+
     > div {
       width: 5rem;
       height: 5rem;
