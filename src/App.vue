@@ -16,6 +16,9 @@
     <button v-else class="btn" @click="handleStart" :disabled="count >= numList.length">
     START
     </button>
+    <button class="btn secondary" @click="handleReset">
+      RESET
+    </button>
   </div>
   <!-- <div class="num">{{count}} 次</div> -->
   <div class="num">
@@ -31,10 +34,11 @@ export default defineComponent({
   setup(props) {
     const isRolling = ref(false)
     const wrapperRef = ref<HTMLDivElement>()
+    const total = 6
     const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, 6)).toString().padEnd(6, "0")
     const count = ref(0)
     // const num = ref<string>(getRandomNum())
-    const numList = ref<string[]>(Array(6).fill("").map(t=> getRandomNum()))
+    const numList = ref<string[]>(Array(total).fill("").map(t=> getRandomNum()))
 
 
     onMounted(() => {
@@ -65,13 +69,16 @@ export default defineComponent({
         }, 500 * (i + 1))
       })
       isRolling.value = false
+    }
 
-
+    const handleReset = () => {
+      count.value = 0
     }
     return {
       isRolling,
       handleStart,
       handleStop,
+      handleReset,
       wrapperRef,
       numList,
       count
@@ -184,12 +191,14 @@ body {
 }
 
 .footer {
-  text-align: center;
-
+  display: flex;
+  column-gap: 0.5em;
+  justify-content: center;
 }
 
 .btn {
-  background-color: chocolate;
+  $bgcolor: chocolate;
+  background-color: $bgcolor;
   border: none;
   padding: 0.7em 1.5em;
   color: #fff;
@@ -198,7 +207,14 @@ body {
   border-radius: 0.3em;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   &:hover {
-    background-color:darken(chocolate, 5%);
+    background-color: darken($bgcolor, 10%);
+  }
+  &.secondary {
+    $bgcolor: cadetblue;
+    background-color: $bgcolor;
+    &:hover {
+      background-color: darken($bgcolor, 10%);
+    }
   }
   &:disabled {
     cursor: not-allowed;
