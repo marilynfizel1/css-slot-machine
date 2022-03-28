@@ -1,7 +1,5 @@
 <template>
-  <div class="num">
-    {{num}}
-  </div>
+  <div class="header">NO: {{count}}</div>
   <div ref="containerRef" class="container">
     <div v-for="box in 6" :key="box" class="box">
       <div>0</div>
@@ -17,6 +15,12 @@
     START
     </button>
   </div>
+  <!-- <div class="num">{{count}} 次</div> -->
+  <div class="num">
+    <div v-for="(n,i) in numList" :key="i">
+      ({{i+1}}) {{n}}
+    </div>
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent,onMounted,ref,watchEffect } from "@vue/runtime-core";
@@ -25,22 +29,22 @@ export default defineComponent({
   setup(props) {
     const isRolling = ref(false)
     const containerRef = ref<HTMLDivElement>()
-    const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, 6)).toString()
-    const num = ref(getRandomNum())
-    watchEffect(() => {
-    console.log(num.value)
-    })
+    const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, 6)).toString().padEnd(6, "0")
+    const count = ref(0)
+    // const num = ref<string>(getRandomNum())
+    const numList = ref<string[]>(Array(6).fill("").map(t=> getRandomNum()))
+
 
     onMounted(() => {
       containerRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
-        _box.style.transform = `translateY(calc(-5rem * (${num.value.charAt(i)})))`
+        _box.style.transform = `translateY(calc(-5rem * (${getRandomNum().charAt(i)})))`
       })
     })
 
     const handleStart = () => {
       if(!containerRef.value) return
-      num.value = getRandomNum()
+      ++count.value
       containerRef.value?.querySelectorAll(".box").forEach(box => {
         const _box = box as HTMLDivElement
         _box.classList.remove("stop")
@@ -53,7 +57,7 @@ export default defineComponent({
         const _box = box as HTMLDivElement
         _box.classList.remove("start")
         _box.classList.add('stopping')
-        _box.style.setProperty("--target-num", num.value.charAt(i))
+        _box.style.setProperty("--target-num", numList.value[count.value -1].charAt(i))
          setTimeout(() => {
           _box.classList.replace("stopping", "stop")
         }, 1000 * (i + 1))
@@ -67,7 +71,8 @@ export default defineComponent({
       handleStart,
       handleStop,
       containerRef,
-      num
+      numList,
+      count
     }
   }
 })
@@ -109,11 +114,23 @@ body {
   padding: 100px 10px;
 }
 
-.num {
+.header {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 3rem;
   font-weight: bold;
-  text-align: center;
-  color:chocolate;
+}
+
+.num {
+  font-size: 2rem;
+  font-weight: bold;
+  color:gray;
+  width: fit-content;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* margin: 2rem auto; */
+  > div {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #ccc;
+  }
 }
 
 .footer {
@@ -125,6 +142,7 @@ body {
   background-color: lightgray;
   overflow: hidden;
   margin-bottom: 2rem;
+  width:fit-content;
   /* display: flex; */
   /* column-gap: 0.1rem; */
   .box {
@@ -160,7 +178,7 @@ body {
       display: grid;
       font-size: 2rem;
       place-items: center;
-      border-right: 1px solid rgba(#fff,0.2)
+      border-right: 1px solid rgba(#fff,0.2);
       /* border-bottom: 1px solid rgba(#fff,0.2) */
     }
   }
