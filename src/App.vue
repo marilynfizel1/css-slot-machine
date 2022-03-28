@@ -16,9 +16,9 @@
     <button v-else class="btn" @click="handleStart" :disabled="count >= numList.length">
     START
     </button>
-    <button class="btn secondary" @click="handleReset">
+    <!-- <button class="btn secondary" @click="handleReset">
       RESET
-    </button>
+    </button> -->
   </div>
   <!-- <div class="num">{{count}} 次</div> -->
   <div class="num">
