@@ -2,7 +2,7 @@
   <div class="container">
     <!-- <div class="no">NO: {{count}}</div> -->
     <div ref="wrapperRef" class="box-wrapper">
-      <div v-for="box in 6" :key="box" class="box">
+      <div v-for="box in numLen" :key="box" class="box">
         <div>0</div>
         <div v-for="n in 9" :key="n">{{n}}</div>
         <div class="">0</div>
@@ -34,11 +34,12 @@ export default defineComponent({
   setup(props) {
     const isRolling = ref(false)
     const wrapperRef = ref<HTMLDivElement>()
-    const total = 6
-    const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, 6)).toString().padEnd(6, "0")
-    const count = ref(0)
-    // const num = ref<string>(getRandomNum())
-    const numList = ref<string[]>(Array(total).fill("").map(t=> getRandomNum()))
+    const numLen = 7 // 開獎號碼長度
+    const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, numLen)).toString().padEnd(numLen, "0")
+    const count = ref(0) // 拉霸次數
+
+    // 製作開獎號碼組
+    const numList = ref<string[]>(Array(numLen).fill("").map(t=> getRandomNum()))
 
 
     onMounted(() => {
@@ -81,7 +82,8 @@ export default defineComponent({
       handleReset,
       wrapperRef,
       numList,
-      count
+      count,
+      numLen
     }
   }
 })
