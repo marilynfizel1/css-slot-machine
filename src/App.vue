@@ -10,19 +10,34 @@
     </div>
   </div>
   <div class="footer">
-    <button v-if="isRolling" class="btn" @click="handleStop">
-      STOP
+    <button class="btn" @click="isSingle = !isSingle">
+      AUTO {{isSingle ? '(S)' : ''}}
     </button>
-    <button v-else class="btn" @click="handleStart" :disabled="count >= numList.length">
-    START
-    </button>
+    <template v-if="isSingle">
+      <button v-if="isRolling" class="btn" @click="handleSingleStop()">
+        STOP(S)
+      </button>
+      <button v-else class="btn" @click="handleSingleStart()" :disabled="count >= numList.length">
+      START(S)
+      </button>
+    </template>
+    <template v-else>
+      <button v-if="isRolling" class="btn" @click="handleStop()">
+        STOP
+      </button>
+      <button v-else class="btn" @click="handleStart()" :disabled="count >= numList.length">
+        START
+      </button>
+    </template>
+
+
     <!-- <button class="btn secondary" @click="handleReset">
       RESET
     </button> -->
   </div>
   <!-- <div class="num">{{count}} 次</div> -->
   <div class="num">
-    <div v-for="(n,i) in numList" :key="i" :class="{active: count === i+1}">
+    <div v-for="(n,i) in numList" :key="i">
       ({{i+1}}) {{n}}
     </div>
   </div>
@@ -36,7 +51,9 @@ export default defineComponent({
     const wrapperRef = ref<HTMLDivElement>()
     const numLen = 7 // 開獎號碼長度
     const getRandomNum = () => Math.floor(Math.random() * Math.pow(10, numLen)).toString().padEnd(numLen, "0")
-    const count = ref(0) // 拉霸次數
+    const count = ref(0) // 第N組數字
+    const numIndex = ref(0) // 第N組數字
+    const isSingle = ref(false)
 
     // 製作開獎號碼組
     const numList = ref<string[]>(Array(numLen).fill("").map(t=> getRandomNum()))
@@ -51,6 +68,7 @@ export default defineComponent({
 
     const handleStart = () => {
       if(!wrapperRef.value) return
+      numIndex.value = 0
       ++count.value
       wrapperRef.value?.querySelectorAll(".box").forEach(box => {
         const _box = box as HTMLDivElement
@@ -59,12 +77,34 @@ export default defineComponent({
       })
       isRolling.value = true
     }
+    const handleSingleStart = () => {
+      if(!wrapperRef.value) return
+      if(numIndex.value >= 7) {
+        numIndex.value = 0
+        ++count.value
+      }
+      const _box = wrapperRef.value?.querySelectorAll(".box")[numIndex.value] as HTMLDivElement
+      _box.classList.remove("stop")
+      _box.classList.add('start')
+      isRolling.value = true
+    }
+    const handleSingleStop = () => {
+      if(!wrapperRef.value) return
+      console.log(numIndex.value)
+      const _box = wrapperRef.value?.querySelectorAll(".box")[numIndex.value] as HTMLDivElement
+      _box.classList.remove("start")
+      _box.classList.add('stopping')
+      _box.style.setProperty("--target-num", numList.value[count.value].charAt(numIndex.value))
+      _box.classList.replace("stopping", "stop")
+      isRolling.value = false
+      ++numIndex.value
+    }
     const handleStop = () => {
        wrapperRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
         _box.classList.remove("start")
         _box.classList.add('stopping')
-        _box.style.setProperty("--target-num", numList.value[count.value -1].charAt(i))
+        _box.style.setProperty("--target-num", numList.value[count.value - 1].charAt(i))
          setTimeout(() => {
           _box.classList.replace("stopping", "stop")
         }, 500 * (i + 1))
@@ -78,12 +118,15 @@ export default defineComponent({
     return {
       isRolling,
       handleStart,
+      handleSingleStart,
+      handleSingleStop,
       handleStop,
       handleReset,
       wrapperRef,
       numList,
       count,
-      numLen
+      numLen,
+      isSingle
     }
   }
 })
