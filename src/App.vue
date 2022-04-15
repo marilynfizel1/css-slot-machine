@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="footer">
-    <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType">
+    <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="![0, 7].includes(numIndex)">
       AUTO
     </button>
     <button v-if="isRolling" class="btn" @click="isSingle ? handleSingleStop() : handleStop()">
@@ -45,7 +45,6 @@ export default defineComponent({
     const numIndex = ref(0) // 第N個數字
     const isSingle = ref(false)
     const isBlur = ref(false)
-    const targetNum = computed(() => numList.value[count.value]?.charAt(numIndex.value))
 
     // 製作開獎號碼組
     const numList = ref<string[]>(Array(groupLen).fill("").map(t=> getRandomNum()))
@@ -60,6 +59,9 @@ export default defineComponent({
 
     const switchOpenType = () => {
      isSingle.value = !isSingle.value
+     if(isBlur.value) {
+       count.value++
+     }
      isBlur.value = false
     }
 
@@ -67,9 +69,6 @@ export default defineComponent({
       if(!wrapperRef.value) return
       if(isBlur.value) {
         ++count.value
-        // if(count.value >= groupLen) {
-        //   count.value = 0
-        // }
       }
       numIndex.value = 0
       isBlur.value = true
@@ -85,7 +84,7 @@ export default defineComponent({
         const _box = box as HTMLDivElement
         _box.classList.remove("start")
         _box.classList.add('stopping')
-        _box.style.setProperty("--target-num", targetNum.value || Math.floor(Math.random() * 10).toString())
+        _box.style.setProperty("--target-num", numList.value[count.value]?.charAt(i) || Math.floor(Math.random() * 10).toString())
          setTimeout(() => {
           _box.classList.replace("stopping", "stop")
         }, 500 * (i + 1))
@@ -94,13 +93,10 @@ export default defineComponent({
     }
     const handleSingleStart = () => {
       if(!wrapperRef.value) return
-      if(numIndex.value >= 7) {
-        numIndex.value = 0
+      if(isBlur.value && numIndex.value === 0) {
         ++count.value
       }
-      // if(count.value >= groupLen) {
-      //   count.value = 0
-      // }
+      isBlur.value = true
       const _box = wrapperRef.value?.querySelectorAll(".box")[numIndex.value] as HTMLDivElement
       _box.classList.remove("stop")
       _box.classList.add('start')
@@ -111,10 +107,16 @@ export default defineComponent({
       const _box = wrapperRef.value?.querySelectorAll(".box")[numIndex.value] as HTMLDivElement
       _box.classList.remove("start")
       _box.classList.add('stopping')
-      _box.style.setProperty("--target-num", targetNum.value || Math.floor(Math.random() * 10).toString())
+      _box.style.setProperty("--target-num", numList.value[count.value]?.charAt(numIndex.value) || Math.floor(Math.random() * 10).toString())
       _box.classList.replace("stopping", "stop")
       isRolling.value = false
-      ++numIndex.value
+
+      if(numIndex.value + 1 >= numLen) {
+        numIndex.value = 0
+
+      }else {
+        ++numIndex.value
+      }
     }
 
 
@@ -138,7 +140,8 @@ export default defineComponent({
       count,
       numLen,
       isSingle,
-      groupLen
+      groupLen,
+      numIndex
     }
   }
 })
