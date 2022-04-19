@@ -12,30 +12,29 @@
       </div>
       <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/60 via-black/0 to-black/60"></div>
       <img src="/img/slot_frame.png" class="absolute" alt="">
-      <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer">
+
+      <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer" @click="handleReset()">
         <img src="/img/btn_rest.png" class="group-active:hidden" alt="">
         <img src="/img/btn_rest_down.png" class="hidden group-active:block" alt="">
       </div>
-      <div class="group absolute w-32 bottom-[7.5%] left-[39%] cursor-pointer">
-        <img src="/img/btn_auto_bl.png" class="group-active:hidden" alt="">
-        <img src="/img/btn_auto_down_bl.png" class="hidden group-active:block" alt="">
+      <div class="group absolute w-32 bottom-[7.5%] left-[39%] cursor-pointer" @click="switchOpenType">
+        <div class="" v-if="isSingle">
+          <img src="/img/btn_auto_bl.png" class="group-active:hidden" alt="">
+          <img src="/img/btn_auto_down_bl.png" class="hidden group-active:block" alt="">
+        </div>
+        <div class="" v-else>
+          <img src="/img/btn_auto_y.png" class="group-active:hidden" alt="">
+          <img src="/img/btn_auto_down_y.png" class="hidden group-active:block" alt="">
+        </div>
       </div>
-      <div class="group absolute w-40 bottom-[6%] right-[16%] cursor-pointer">
+
+      <div class="group absolute w-40 bottom-[6%] right-[16%] cursor-pointer" @click="handleSpinClicked()">
         <img src="/img/btn_spin.png" class="group-active:hidden" alt="">
         <img src="/img/btn_spin_down.png" class="hidden group-active:block" alt="">
       </div>
     </div>
 
   </div>
-  <!-- <div class="container">
-    <div ref="wrapperRef" class="box-wrapper">
-      <div v-for="box in numLen" :key="box" class="box">
-        <div>0</div>
-        <div v-for="n in 9" :key="n">{{n}}</div>
-        <div class="">0</div>
-      </div>
-    </div>
-  </div> -->
   <div class="footer">
     <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
       AUTO
@@ -156,6 +155,22 @@ export default defineComponent({
         _box.classList.add("stop")
       })
     }
+
+    const handleSpinClicked = () => {
+      if(isRolling.value) {
+        if(isSingle.value) {
+          handleSingleStop()
+        }else {
+          handleStop()
+        }
+      }else {
+       if(isSingle.value) {
+          handleSingleStart()
+        }else {
+          handleStart()
+        }
+      }
+    }
     return {
       isRolling,
       handleStart,
@@ -163,6 +178,7 @@ export default defineComponent({
       handleSingleStop,
       handleStop,
       handleReset,
+      handleSpinClicked,
       switchOpenType,
       wrapperRef,
       numList,
