@@ -14,7 +14,7 @@
           <div class="">0</div>
         </div>
       </div>
-      <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/60 via-black/0 to-black/60"></div>
+      <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/50 via-black/0 to-black/50"></div>
       <img src="/img/slot_frame.png" class="absolute" alt="">
 
       <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer" @click="handleReset()">
@@ -83,7 +83,6 @@ export default defineComponent({
 
     onMounted(() => {
       const ramdomNum = getRandomNum()
-      console.log(ramdomNum)
       wrapperRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
         _box.style.transform = `translateY(calc( -1 * (${numH} * ${ramdomNum.charAt(i)} + ${numH} * 10 + ${numDiff})))`
@@ -253,7 +252,7 @@ body {
       }
       &.stop {
         animation-name: stop;
-        animation-duration: calc(0.5s * (1 + (9 - var(--target-num))));
+        animation-duration: calc(0.5s * (10 - var(--target-num)));
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
         animation-timing-function: ease-out;
