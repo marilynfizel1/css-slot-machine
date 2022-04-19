@@ -1,45 +1,19 @@
 <template>
-  <div class="flex w-[1327px] h-[800px] bg-gray-100">
-
-    <div class="flex-1">
-
-      <div class="h-[70%] relative bg-contain bg-no-repeat bg-center bg-[url('/img/slot-bg.png')]">
-        <img src="/img/bg_slot.png" class="object-cover absolute" />
-        <img src="/img/slot_frame.png" class="absolute" alt="">
-        <div class="group absolute w-24 bottom-[8%] left-[13%] cursor-pointer">
-          <img src="/img/btn_rest.png" class="group-active:hidden" alt="">
-          <img src="/img/btn_rest_down.png" class="hidden group-active:block" alt="">
-        </div>
-        <div class="group absolute w-24 bottom-[7.5%] left-[39%] cursor-pointer">
-          <img src="/img/btn_auto_bl.png" class="group-active:hidden" alt="">
-          <img src="/img/btn_auto_down_bl.png" class="hidden group-active:block" alt="">
-        </div>
-        <div class="group absolute w-32 bottom-[6%] right-[18%] cursor-pointer">
-          <img src="/img/btn_spin.png" class="group-active:hidden" alt="">
-          <img src="/img/btn_spin_down.png" class="hidden group-active:block" alt="">
-        </div>
-
+  <div class="h-[720px] w-[1280px] relative bg-contain bg-top bg-[url('/img/slot-bg.png')]">
+    <div class="">
+      <img src="/img/bg_slot.png" class="object-cover absolute" />
+      <img src="/img/slot_frame.png" class="absolute" alt="">
+      <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer">
+        <img src="/img/btn_rest.png" class="group-active:hidden" alt="">
+        <img src="/img/btn_rest_down.png" class="hidden group-active:block" alt="">
       </div>
-      <div class="text-2xl bg-purple-600 text-yellow-200">金券共xx</div>
-      <div class="text-2xl bg-black text-white font-medium">銀券-GGOO</div>
-      <div class="flex gap-6 items-center bg-purple-400">
-        <h1 class="text-4xl">幸運號碼</h1>
-        <div class="space-x-2">
-          <div v-for="n in 7" :key="n" class="bg-purple-900 rounded-full h-16 w-16 inline-block"></div>
-        </div>
+      <div class="group absolute w-32 bottom-[7.5%] left-[39%] cursor-pointer">
+        <img src="/img/btn_auto_bl.png" class="group-active:hidden" alt="">
+        <img src="/img/btn_auto_down_bl.png" class="hidden group-active:block" alt="">
       </div>
-    </div>
-    <div class="w-[25%]">
-      <div class="text-center text-3xl">LOGO</div>
-      <div class="border-2 border-pink-500 rounded-md flex">
-        <div class="flex-1"></div>
-        <div class="text-vertical text-xl">金券獎項</div>
-      </div>
-      <div class="text-center">
-        <h1 class="text-xl">得獎號碼</h1>
-        <div class="">
-          <div v-for="n in 5" :key="n" class="">9999999</div>
-        </div>
+      <div class="group absolute w-40 bottom-[6%] right-[16%] cursor-pointer">
+        <img src="/img/btn_spin.png" class="group-active:hidden" alt="">
+        <img src="/img/btn_spin_down.png" class="hidden group-active:block" alt="">
       </div>
     </div>
 
