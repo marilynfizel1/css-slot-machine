@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="footer">
-    <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="![0, 7].includes(numIndex)">
+    <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
       AUTO
     </button>
     <button v-if="isRolling" class="btn" @click="isSingle ? handleSingleStop() : handleStop()">
@@ -121,6 +121,7 @@ export default defineComponent({
 
 
     const handleReset = () => {
+      numIndex.value = 0
       wrapperRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
         _box.style.setProperty("--target-num", '0')
@@ -283,7 +284,7 @@ body {
   }
   &.auto-btn {
     background-color: rgb(147, 8, 147);
-    &.off {
+    &.off, &:disabled {
       background-color: rgb(104, 104, 104);
     }
   }
