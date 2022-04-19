@@ -2,6 +2,15 @@
   <div class="h-[720px] w-[1280px] relative bg-contain bg-top bg-[url('/img/slot-bg.png')]">
     <div class="">
       <img src="/img/bg_slot.png" class="object-cover absolute" />
+
+      <div ref="wrapperRef" class="absolute top-[23%] left-[16.5%] h-[24.2rem] overflow-hidden w-fit">
+        <div v-for="box in numLen" :key="box" class="box border-r last-of-type:border-none border-black">
+          <div>0</div>
+          <div v-for="n in 9" :key="n">{{n}}</div>
+          <div class="">0</div>
+        </div>
+      </div>
+      <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/60 via-black/0 to-black/60"></div>
       <img src="/img/slot_frame.png" class="absolute" alt="">
       <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer">
         <img src="/img/btn_rest.png" class="group-active:hidden" alt="">
@@ -26,7 +35,7 @@
         <div class="">0</div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="footer">
     <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
       AUTO
@@ -46,7 +55,7 @@
     <div v-for="(n,i) in numList" :key="i" :class="{active: count === i}">
       ({{i+1}}) {{n}}
     </div>
-  </div> -->
+  </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent,onMounted,ref,watchEffect } from "@vue/runtime-core";
@@ -65,12 +74,14 @@ export default defineComponent({
 
     // 製作開獎號碼組
     const numList = ref<string[]>(Array(groupLen).fill("").map(t=> getRandomNum()))
-
+    const r = getComputedStyle(document.querySelector(':root') as Element);
+    const numH = r.getPropertyValue("--num-h")
+    const numDiff = r.getPropertyValue("--num-diff")
 
     onMounted(() => {
       wrapperRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
-        _box.style.transform = `translateY(calc(-5rem * (${getRandomNum().charAt(i)})))`
+        _box.style.transform = `translateY(calc( -1 * ${numH} * ${getRandomNum().charAt(i)} + ${numDiff}))`
       })
     })
 
@@ -169,11 +180,15 @@ export default defineComponent({
 :root {
   font-size: 16px;
   --target-num: 2;
+  --num-h: 12rem;
+  --num-w: 7.3rem;
+  --num-size: 10rem;
+  --num-diff: 5rem;
 }
 
 @keyframes rolling {
   0% {
-    transform: translateY(calc(-100% + 5rem));
+    transform: translateY(calc(-100% + var(--num-h)));
   }
   100% {
     transform: translateY(0%);
@@ -182,44 +197,25 @@ export default defineComponent({
 
 @keyframes stop {
   0% {
-    transform: translateY(calc(-100% + 5rem));
+    transform: translateY(calc(-100% + var(--num-h)));
   }
 
   100% {
-    transform: translateY(calc(-5rem * (var(--target-num))));
+    transform: translateY(calc((-1) * var(--num-h) * var(--target-num) + var(--num-diff)));
   }
 }
 
 body {
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
 
 
-.container {
-  margin: 0 auto;
-  width: fit-content;
-  .no {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 3rem;
-    font-weight: bold;
-  }
-  .box-wrapper {
-    height: 5rem;
-    background-color: lightgray;
-    overflow: hidden;
-    width:fit-content;
-    margin: 0 auto;
-    margin-bottom: 1.5rem;
-    /* display: flex; */
-    /* column-gap: 0.1rem; */
-    .box {
+ .box {
       /* animation: rolling 2s ease-in; */
       display: inline-block;
       transform-origin: bottom;
       text-align: center;
-      background-color: darkgreen;
-      color: yellowgreen;
       width: min-content;
       position: relative;
       animation-name: rolling;
@@ -241,17 +237,12 @@ body {
       }
 
       > div {
-        width: 5rem;
-        height: 5rem;
-        display: grid;
-        font-size: 2rem;
-        place-items: center;
-        border-right: 1px solid rgba(#fff,0.2);
-        /* border-bottom: 1px solid rgba(#fff,0.2) */
+        width: var(--num-w);
+        height: var(--num-h);
+        font-size: var(--num-size);
+        /* border-right: 1px solid rgba(#fff,0.2); */
       }
     }
-  }
-}
 
 .num {
   font-size: 1.5rem;
