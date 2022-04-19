@@ -7,6 +7,10 @@
         <div v-for="box in numLen" :key="box" class="box border-r last-of-type:border-none border-black">
           <div>0</div>
           <div v-for="n in 9" :key="n">{{n}}</div>
+          <div>0</div>
+          <div v-for="n in 9" :key="n">{{n}}</div>
+          <div>0</div>
+          <div v-for="n in 9" :key="n">{{n}}</div>
           <div class="">0</div>
         </div>
       </div>
@@ -35,7 +39,7 @@
     </div>
 
   </div>
-  <div class="footer">
+  <!-- <div class="footer">
     <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
       AUTO
     </button>
@@ -49,7 +53,7 @@
     <button class="btn secondary" @click="handleReset()">
       RESET
     </button>
-  </div>
+  </div> -->
   <div class="num">
     <div v-for="(n,i) in numList" :key="i" :class="{active: count === i}">
       ({{i+1}}) {{n}}
@@ -78,9 +82,11 @@ export default defineComponent({
     const numDiff = r.getPropertyValue("--num-diff")
 
     onMounted(() => {
+      const ramdomNum = getRandomNum()
+      console.log(ramdomNum)
       wrapperRef.value?.querySelectorAll(".box").forEach((box, i) => {
         const _box = box as HTMLDivElement
-        _box.style.transform = `translateY(calc( -1 * ${numH} * ${getRandomNum().charAt(i)} + ${numDiff}))`
+        _box.style.transform = `translateY(calc( -1 * (${numH} * ${ramdomNum.charAt(i)} + ${numH} * 10 + ${numDiff})))`
       })
     })
 
@@ -199,7 +205,7 @@ export default defineComponent({
   --num-h: 12rem;
   --num-w: 7.3rem;
   --num-size: 10rem;
-  --num-diff: 5rem;
+  --num-diff: -5rem;
 }
 
 @keyframes rolling {
@@ -213,12 +219,13 @@ export default defineComponent({
 
 @keyframes stop {
   0% {
-    transform: translateY(calc(-100% + var(--num-h)));
+    transform: translateY(calc(-100% + var(--num-h) * 10 - var(--num-h) * var(--target-num)));
   }
 
   100% {
-    transform: translateY(calc((-1) * var(--num-h) * var(--target-num) + var(--num-diff)));
+    transform: translateY(calc((-1) * (var(--num-h) * var(--target-num) + var(--num-h) * 10 + var(--num-diff))));
   }
+  /* translateY(calc( -1 * (${numH} * ${ramdomNum.charAt(i)} + ${numH} * 10 + ${numDiff}))) */
 }
 
 body {
@@ -239,10 +246,10 @@ body {
       animation-iteration-count: infinite;
       animation-timing-function: linear;
       &.start {
-        animation-duration: 0.5s;
+        animation-duration: 2s;
       }
       &.stopping {
-        animation-duration: 1s;
+        animation-duration: 3s;
       }
       &.stop {
         animation-name: stop;
