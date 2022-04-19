@@ -21,7 +21,7 @@
         <img src="/img/btn_rest.png" class="group-active:hidden" alt="">
         <img src="/img/btn_rest_down.png" class="hidden group-active:block" alt="">
       </div>
-      <div class="group absolute w-32 bottom-[7.5%] left-[39%] cursor-pointer" @click="switchOpenType">
+      <button class="group absolute w-32 bottom-[7.5%] left-[39%] cursor-pointer" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
         <div class="" v-if="isSingle">
           <img src="/img/btn_auto_bl.png" class="group-active:hidden" alt="">
           <img src="/img/btn_auto_down_bl.png" class="hidden group-active:block" alt="">
@@ -30,7 +30,7 @@
           <img src="/img/btn_auto_y.png" class="group-active:hidden" alt="">
           <img src="/img/btn_auto_down_y.png" class="hidden group-active:block" alt="">
         </div>
-      </div>
+      </button>
 
       <div class="group absolute w-40 bottom-[6%] right-[16%] cursor-pointer" @click="handleSpinClicked()">
         <img src="/img/btn_spin.png" class="group-active:hidden" alt="">
