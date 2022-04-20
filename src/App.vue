@@ -54,11 +54,11 @@
       RESET
     </button>
   </div> -->
-  <div class="num">
+  <!-- <div class="num">
     <div v-for="(n,i) in numList" :key="i" :class="{active: count === i}">
       ({{i+1}}) {{n}}
     </div>
-  </div>
+  </div> -->
 </template>
 <script lang="ts">
 import { computed, defineComponent,onMounted,ref,watchEffect } from "@vue/runtime-core";
