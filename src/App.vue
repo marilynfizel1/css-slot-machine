@@ -1,7 +1,8 @@
 <template>
   <div class="h-[720px] w-[1280px] relative bg-contain bg-top bg-[url('/img/slot-bg.png')]">
     <div class="">
-      <img src="/img/bg_slot.png" class="object-cover absolute" />
+      <!-- <img src="/img/bg_slot.png" class="object-cover absolute" /> -->
+      <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-[#121257] via-white to-[#121257]"></div>
 
       <div ref="wrapperRef" class="absolute top-[23%] left-[16.5%] h-[24.2rem] overflow-hidden w-fit">
         <div v-for="box in numLen" :key="box" class="box border-r last-of-type:border-none border-black">
@@ -14,7 +15,7 @@
           <div class="">0</div>
         </div>
       </div>
-      <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/50 via-black/0 to-black/50"></div>
+      <!-- <div class="absolute top-[23%] left-[15%] h-[24.2rem] w-[55rem] top bg-gradient-to-b from-black/90 via-black/0 to-black/90"></div> -->
       <img src="/img/slot_frame.png" class="absolute" alt="">
 
       <div class="group absolute w-32 bottom-[8%] left-[13%] cursor-pointer" @click="handleReset()">
@@ -117,9 +118,7 @@ export default defineComponent({
         _box.classList.remove("start")
         _box.classList.add('stopping')
         _box.style.setProperty("--target-num", numList.value[count.value]?.charAt(i) || Math.floor(Math.random() * 10).toString())
-         setTimeout(() => {
-          _box.classList.replace("stopping", "stop")
-        }, 500 * (i + 1))
+        _box.classList.replace("stopping", "stop")
       })
       isRolling.value = false
     }
@@ -201,7 +200,7 @@ export default defineComponent({
 :root {
   font-size: 16px;
   --target-num: 2;
-  --num-h: 12rem;
+  --num-h: 24.2rem;
   --num-w: 7.3rem;
   --num-size: 10rem;
   --num-diff: -5rem;
@@ -248,11 +247,11 @@ body {
         animation-duration: 2s;
       }
       &.stopping {
-        animation-duration: 3s;
+        animation-duration: 2s;
       }
       &.stop {
         animation-name: stop;
-        animation-duration: calc(0.5s * (10 - var(--target-num)));
+        animation-duration: calc(0.05s * (10 - var(--target-num)));
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
         animation-timing-function: ease-out;
