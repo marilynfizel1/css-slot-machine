@@ -244,14 +244,14 @@ body {
       animation-iteration-count: infinite;
       animation-timing-function: linear;
       &.start {
-        animation-duration: 2s;
+        animation-duration: 1s;
       }
       &.stopping {
-        animation-duration: 2s;
+        animation-duration: 1s;
       }
       &.stop {
         animation-name: stop;
-        animation-duration: calc(0.05s * (10 - var(--target-num)));
+        animation-duration: calc(0.02s * (10 - var(--target-num)));
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
         animation-timing-function: ease-out;
