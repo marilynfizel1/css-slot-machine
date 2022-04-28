@@ -40,29 +40,10 @@
     </div>
 
   </div>
-  <!-- <div class="footer">
-    <button class="btn auto-btn" :class="{off: isSingle}" @click="switchOpenType" :disabled="numIndex !== 0 || isRolling">
-      AUTO
-    </button>
-    <button v-if="isRolling" class="btn" @click="isSingle ? handleSingleStop() : handleStop()">
-      STOP
-    </button>
-    <button v-else class="btn" @click="isSingle ? handleSingleStart() : handleStart()">
-      START
-    </button>
-
-    <button class="btn secondary" @click="handleReset()">
-      RESET
-    </button>
-  </div> -->
-  <!-- <div class="num">
-    <div v-for="(n,i) in numList" :key="i" :class="{active: count === i}">
-      ({{i+1}}) {{n}}
-    </div>
-  </div> -->
 </template>
 <script lang="ts">
 import { computed, defineComponent,onMounted,ref,watchEffect } from "@vue/runtime-core";
+import lotterys from './assets/lotterys.json'
 
 export default defineComponent({
   setup(props) {
@@ -77,7 +58,8 @@ export default defineComponent({
     const isBlur = ref(false)
 
     // 製作開獎號碼組
-    const numList = ref<string[]>(Array(groupLen).fill("").map(t=> getRandomNum()))
+    // const numList = ref<string[]>(Array(groupLen).fill("").map(t=> getRandomNum()))
+    const numList = ref<string[]>(lotterys)
     const r = getComputedStyle(document.querySelector(':root') as Element);
     const numH = r.getPropertyValue("--num-h")
     const numDiff = r.getPropertyValue("--num-diff")
